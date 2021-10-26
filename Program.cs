@@ -36,7 +36,15 @@ namespace osu_backrep
                     {
                         Console.WriteLine($"Working on {file}");
                         string content = File.ReadAllText(file);
-                        string result = Regex.Replace(content,"0,0,*\"*?.*[jpg,png]\"*,0,0", $"0,0,\"{filename}\",0,0");
+                        string result = Regex.Replace(content,"0,0,*\"*?.*[jpg,png]\"*,0,0", $"0,0,\"{filename}\",0,");
+
+                        //exceptions
+                        switch(File.ReadLines(file).First())
+                        {
+                            case "osu file format v7":
+                            result = Regex.Replace(content,"0,0,*\"*?.*[jpg,png]\"",$"0,0,\"{filename}\"");
+                            break;
+                        }
                         File.WriteAllText(file,result);
                     }
                 }
